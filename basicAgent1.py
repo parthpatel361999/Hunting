@@ -20,7 +20,15 @@ def basicAgent1(agent, target):
                         c = j
                     j += 1
                 i += 1
+        # displayProbabilities(agent)
+        # print()
     return agent.numMoves
+
+def displayProbabilities(agent):
+    for r in agent.map:
+        for cell in r:
+            print("{:.5f}".format(cell.probability), end='  ')
+        print()
 
 agent = Agent(5)
 target = Target(5)

@@ -66,6 +66,7 @@ class Cell:
         self.col = col
         self.probability = 1.0/dim**2
         self.falseNegativeProbability = falseNegativeProbability
+        self.probability2 = self.probability * (1 - self.falseNegativeProbability)
         self.neighbors = findNeighbors(row=row, col=col, dim=dim)
 
 def findNeighbors(row, col, dim):

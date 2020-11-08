@@ -1,10 +1,15 @@
 from common import Target, Agent, Cell
 import random as rnd
 
-def basicAgent1(agent, target):
-    r, c = (rnd.randint(0, agent.dim - 1), rnd.randint(0, agent.dim - 1))
+def basicAgent2(agent, target):
+    highest = 0
+    for row in agent.map:
+        for cell in row:
+            if cell.probability2 > highest:
+                highest = cell.probability2
+                r, c = cell.row, cell.col
     while(agent.hasFoundTarget == False):
-        maxBelief = 0
+        maxP = 0
         searchResult = agent.searchCell(r, c, target)
         if searchResult == False:
             scale = 1 - agent.map[r][c].probability + agent.map[r][c].probability * agent.map[r][c].falseNegativeProbability
@@ -14,8 +19,9 @@ def basicAgent1(agent, target):
                 j = 0
                 while j < agent.dim:
                     agent.map[i][j].probability = agent.map[i][j].probability / scale
-                    if agent.map[i][j].probability > maxBelief:
-                        maxBelief = agent.map[i][j].probability
+                    agent.map[i][j].probability2 = agent.map[i][j].probability * (1 - agent.map[r][c].falseNegativeProbability)
+                    if agent.map[i][j].probability2 > maxP:
+                        maxP = agent.map[i][j].probability2
                         r = i
                         c = j
                     j += 1
@@ -42,5 +48,5 @@ for i in range(numTrials):
     #         print(cell.falseNegativeProbability, end='  ')
     #     print()
     # print(target.position)
-    total += basicAgent1(agent, target)
+    total += basicAgent2(agent, target)
 print("Average Moves Taken: " + str(float(total / numTrials)))

@@ -1,6 +1,6 @@
 import random as rnd
 
-from common import Agent, Cell, Target
+from common import Agent, Target
 
 
 def basicAgent2(agent, target):
@@ -12,6 +12,7 @@ def basicAgent2(agent, target):
             if cell.score > highest:
                 highest = cell.score
                 r, c = cell.row, cell.col
+
     while(agent.hasFoundTarget == False):
         maxP = 0
         searchResult = agent.searchCell(r, c, target)
@@ -27,16 +28,27 @@ def basicAgent2(agent, target):
                 while j < agent.dim:
                     agent.map[i][j].probability = agent.map[i][j].probability / scale
                     agent.map[i][j].score = agent.map[i][j].probability * \
-                        (1 - agent.map[r][c].falseNegativeProbability)
+                        (1 - agent.map[i][j].falseNegativeProbability)
                     if agent.map[i][j].score > maxP:
                         maxP = agent.map[i][j].score
                         r = i
                         c = j
                     j += 1
                 i += 1
+        # print("probs:")
         # displayProbabilities(agent)
+        # print("scores:")
+        # displayScores(agent)
+        # input()
         # print()
     return agent.numMoves
+
+
+def displayScores(agent):
+    for r in agent.map:
+        for cell in r:
+            print("{:.5f}".format(cell.score), end='  ')
+        print()
 
 
 def displayProbabilities(agent):
@@ -48,11 +60,12 @@ def displayProbabilities(agent):
 
 total = 0
 numTrials = 100
+dim = 10
 for i in range(numTrials):
-    agent = Agent(10)
-    target = Target(10)
+    agent = Agent(dim)
+    target = Target(dim)
     while agent.map[target.position[0]][target.position[1]].falseNegativeProbability == 0.9:
-        target = Target(10)
+        target = Target(dim)
     # for r in agent.map:
     #     for cell in r:
     #         print(cell.falseNegativeProbability, end='  ')

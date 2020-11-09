@@ -1,27 +1,35 @@
-from common import Target, Agent, Cell
 import random as rnd
+
+from common import Agent, Cell, Target
+
 
 def basicAgent2(agent, target):
     highest = 0
+    r = c = 0
     for row in agent.map:
         for cell in row:
-            if cell.probability2 > highest:
-                highest = cell.probability2
+            cell.score = cell.probability * (1 - cell.falseNegativeProbability)
+            if cell.score > highest:
+                highest = cell.score
                 r, c = cell.row, cell.col
     while(agent.hasFoundTarget == False):
         maxP = 0
         searchResult = agent.searchCell(r, c, target)
         if searchResult == False:
-            scale = 1 - agent.map[r][c].probability + agent.map[r][c].probability * agent.map[r][c].falseNegativeProbability
-            agent.map[r][c].probability = agent.map[r][c].probability * agent.map[r][c].falseNegativeProbability
+            scale = 1 - agent.map[r][c].probability + \
+                agent.map[r][c].probability * \
+                agent.map[r][c].falseNegativeProbability
+            agent.map[r][c].probability = agent.map[r][c].probability * \
+                agent.map[r][c].falseNegativeProbability
             i = 0
             while i < agent.dim:
                 j = 0
                 while j < agent.dim:
                     agent.map[i][j].probability = agent.map[i][j].probability / scale
-                    agent.map[i][j].probability2 = agent.map[i][j].probability * (1 - agent.map[r][c].falseNegativeProbability)
-                    if agent.map[i][j].probability2 > maxP:
-                        maxP = agent.map[i][j].probability2
+                    agent.map[i][j].score = agent.map[i][j].probability * \
+                        (1 - agent.map[r][c].falseNegativeProbability)
+                    if agent.map[i][j].score > maxP:
+                        maxP = agent.map[i][j].score
                         r = i
                         c = j
                     j += 1
@@ -30,11 +38,13 @@ def basicAgent2(agent, target):
         # print()
     return agent.numMoves
 
+
 def displayProbabilities(agent):
     for r in agent.map:
         for cell in r:
             print("{:.5f}".format(cell.probability), end='  ')
         print()
+
 
 total = 0
 numTrials = 100

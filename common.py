@@ -1,5 +1,6 @@
 import random as rnd
 
+
 class Target:
     def __init__(self, dim):
         self.dim = dim
@@ -15,6 +16,7 @@ class Target:
             self.position = neighbors[rnd.randint(0, len(neighbors) - 1)]
         else:
             self.position = newLocation
+
 
 class Agent:
     def __init__(self, dim):
@@ -60,14 +62,16 @@ class Agent:
         self.currentPosition = (row, col)
         self.numMoves += 1
 
+
 class Cell:
     def __init__(self, row, col, dim, falseNegativeProbability):
         self.row = row
         self.col = col
         self.probability = 1.0/dim**2
         self.falseNegativeProbability = falseNegativeProbability
-        self.probability2 = self.probability * (1 - self.falseNegativeProbability)
+        self.score = 0
         self.neighbors = findNeighbors(row=row, col=col, dim=dim)
+
 
 def findNeighbors(row, col, dim):
     neighbors = []
@@ -78,6 +82,7 @@ def findNeighbors(row, col, dim):
         if r < dim and r >= 0 and c < dim and c >= 0:
             neighbors.append(potentialNeighbor)
     return neighbors
+
 
 def manhattanDistance(position1, position2):
     y1, x1 = position1

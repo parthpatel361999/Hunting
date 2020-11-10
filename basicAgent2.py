@@ -1,6 +1,6 @@
 import random as rnd
 
-from common import Agent, Target
+from common import Agent, Target, numActions
 
 
 def basicAgent2(agent, target):
@@ -31,8 +31,9 @@ def basicAgent2(agent, target):
                         (1 - agent.map[i][j].falseNegativeProbability)
                     if agent.map[i][j].score > maxP:
                         maxP = agent.map[i][j].score
+                        numActions((r,c), (i,j), agent)
                         r = i
-                        c = j
+                        c = j 
                     j += 1
                 i += 1
         # print("probs:")

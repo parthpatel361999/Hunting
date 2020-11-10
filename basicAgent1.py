@@ -1,4 +1,4 @@
-from common import Target, Agent, Cell
+from common import Target, Agent, Cell, manhattanDistance, numActions
 import random as rnd
 
 def basicAgent1(agent, target):
@@ -16,6 +16,7 @@ def basicAgent1(agent, target):
                     agent.map[i][j].probability = agent.map[i][j].probability / scale
                     if agent.map[i][j].probability > maxBelief:
                         maxBelief = agent.map[i][j].probability
+                        numActions((r,c), (i,j), agent)
                         r = i
                         c = j
                     j += 1

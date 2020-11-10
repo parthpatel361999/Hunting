@@ -88,3 +88,7 @@ def manhattanDistance(position1, position2):
     y1, x1 = position1
     y2, x2 = position2
     return abs(y1 - y2) + abs(x1 - x2)
+
+def numActions(initCoords, destination, agent):
+    numMoves = manhattanDistance(initCoords, destination)
+    agent.numMoves += numMoves

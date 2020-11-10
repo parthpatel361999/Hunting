@@ -5,6 +5,8 @@ def basicAgent1(agent, target):
     r, c = (rnd.randint(0, agent.dim - 1), rnd.randint(0, agent.dim - 1))
     while(agent.hasFoundTarget == False):
         maxBelief = 0
+        prevr = r
+        prevc = c
         searchResult = agent.searchCell(r, c, target)
         if searchResult == False:
             scale = 1 - agent.map[r][c].probability + agent.map[r][c].probability * agent.map[r][c].falseNegativeProbability
@@ -16,11 +18,12 @@ def basicAgent1(agent, target):
                     agent.map[i][j].probability = agent.map[i][j].probability / scale
                     if agent.map[i][j].probability > maxBelief:
                         maxBelief = agent.map[i][j].probability
-                        numActions((r,c), (i,j), agent)
+                        
                         r = i
                         c = j
                     j += 1
                 i += 1
+            numActions((prevr,prevc), (r,c), agent)
         # displayProbabilities(agent)
         # print()
     return agent.numMoves

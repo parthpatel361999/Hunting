@@ -15,9 +15,9 @@ def basicAgent3(agent, target):
                 r, c = cell.row, cell.col
 
     while (agent.hasFoundTarget == False):
-        minScore = agent.dim**2
-        tempr = r
-        tempc = c
+        minScore = agent.dim**4
+        prevr = r
+        prevc = c
         searchResult = agent.searchCell(r,c, target)
         if searchResult == False:
             scale = 1 - agent.map[r][c].probability + agent.map[r][c].probability * agent.map[r][c].falseNegativeProbability
@@ -26,20 +26,18 @@ def basicAgent3(agent, target):
             while i < agent.dim:
                 j = 0
                 while j < agent.dim:
-                    if i == tempr and j == tempc:
+                    if i == prevr and j == prevc:
                         j += 1
                         continue
                     agent.map[i][j].probability = agent.map[i][j].probability / scale
-                    dist = manhattanDistance((r,c), (i,j))
+                    dist = manhattanDistance((prevr,prevc), (i,j))
                     agent.map[i][j].score = float(dist) / (agent.map[i][j].probability * (1 - agent.map[i][j].falseNegativeProbability))
                     if minScore > agent.map[i][j].score:
                         minScore = agent.map[i][j].score
-                        tempr = i
-                        tempc = j
+                        r = i
+                        c = j
                     j = j + 1
                 i = i + 1
-            r = tempr
-            c = tempc
 
     return agent.numMoves
 

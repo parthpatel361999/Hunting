@@ -40,7 +40,7 @@ def improvedAgent(agent, target):
                         c = j
                     j = j + 1
                 i = i + 1
-            (r,c) = improvementFunction()
+            r,c = improvementFunction(agent, minScore, prevr, prevc, r, c)
             numActions((prevr, prevc), (r,c), agent)
 
     return agent.numMoves
@@ -57,16 +57,35 @@ improvementFunction(agent.map, minScore, msr, msc, prevr, prevc) returns (nextr,
 
 '''
 
-def improvementFunction(agent, minScore, msr, msc, prevr, prevc): 
-    listProb = list(np.concatenate(agent.map).flat)
-    approvedDict = {}
-    std = np.std(listProb)
+def improvementFunction(agent, minScore, prevr, prevc, msr, msc):  
+    arrayMap = []
+    for row in agent.map:
+        for i in row:
+            arrayMap.append(i.score)
+    std = np.std(arrayMap)
+    currentBestRow = -1
+    currentBestColumn = -1
+    currentBestScore = -1
+    currentMD = -1 
     for row in agent.map: 
         for i in row: 
-            if(i.score <= minScore+std):
-                approvedDict[(i.row,i.col)] = (manhattanDistance((prevr,prevc),(i.row,i.col)),i.score)
-    
-    return (nextr, nextc)
+            if(i.score <= minScore+(0.5*std)):
+                cmd = manhattanDistance((prevr,prevc),(i.row,i.col))
+                if((i.row == prevr and i.col == prevc) or (i.row == msr and i.col == msc)):
+                    continue
+                if(currentBestScore == -1 and currentMD == -1):
+                    currentMD = cmd
+                    currentBestScore = i.score
+                    currentBestRow = i.row
+                    currentBestColumn = i.col
+                elif(i.score < currentBestScore and cmd < currentMD): 
+                    currentMD = cmd
+                    currentBestScore = i.score 
+                    currentBestRow = i.row
+                    currentBestColumn = i.col
+                else:
+                    continue
+    return (currentBestRow, currentBestColumn)
 
 def displayScores(agent):
     for r in agent.map:

@@ -41,7 +41,7 @@ def basicAgent2(agent, target):
                         c = j 
                     j += 1
                 i += 1
-            numActions((prevr, prevc), (r,c), agent)
+            #numActions((prevr, prevc), (r,c), agent)
         # print("probs:")
         # displayProbabilities(agent)
         # print("scores:")

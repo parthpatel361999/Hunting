@@ -1,4 +1,4 @@
-from common import Agent, Target, numActions, manhattanDistance
+from common import targetInRange, maxInRange, maxOutRange, Agent, Target
 import random as rnd
 import numpy as np
 
@@ -29,6 +29,7 @@ def movingTarget1(agent, target):
             #print('target in range? ', withinFive)
             scale = 1 - agent.map[r][c].probability + agent.map[r][c].probability * agent.map[r][c].falseNegativeProbability
             agent.map[r][c].probability = agent.map[r][c].falseNegativeProbability * agent.map[r][c].probability
+            agent.map[r][c].score = agent.map[r][c].probability
             i = 0
             while i < agent.dim:
                 j = 0
@@ -48,75 +49,7 @@ def movingTarget1(agent, target):
             target.move()
     return agent.numMoves
 
-'''
-    Returns list of cells that are within manhattan distance of five away from start cell
-'''
-def withinRange5(agent, r, c, coordList=[], manD=0): 
-    if r >= agent.dim or c >= agent.dim or r < 0 or c < 0:
-        return []
-    elif manD > 5:
-        return []
-    else:
-        if not (r,c) in coordList:
-            coordList.append((r,c))
-    withinRange5(agent, r+1, c, coordList, manD + 1)
-    withinRange5(agent, r-1, c, coordList, manD + 1)
-    withinRange5(agent, r, c+1, coordList, manD + 1)
-    withinRange5(agent, r, c-1, coordList, manD + 1)
-    
-    return coordList
 
-'''
-    If the target is w/in 5, search those cells to find minProb to find next cell to search
-'''
-def maxInRange(agent, r, c):
-    maxScore = np.NINF
-    
-    coordList = withinRange5(agent, r, c)
-    coordList.remove((r,c))
-    #print(coordList)
-    for coord in coordList:
-        #print(coord)
-        (r, c) = coord
-        if agent.map[r][c].score > maxScore:
-            maxScore = agent.map[r][c].score
-            minR = r
-            minC = c
-
-
-    return maxScore, minR, minC
-
-'''
-    If the target is not w/in 5, search cells that are not in that distance to find next lowest cell
-'''
-def maxOutRange(agent, r, c):
-    maxScore = np.NINF
-    coordList = withinRange5(agent, r, c)
-    coordList.remove((r,c))
-    i = 0
-    while i < agent.dim:
-        j = 0
-        while j < agent.dim:
-            if (i,j) in coordList or (i,j) == (r,c):
-                j+=1
-                continue
-            if agent.map[i][j].score > maxScore :
-                maxScore = agent.map[i][j].score
-                minR = i
-                minC = j
-            j+=1
-        i+=1 
-    return maxScore, minR, minC
-'''
-    Returns whether the target is within Manhattan Distance 5 of start cell
-'''
-def targetInRange(agent, target, r, c):
-    coordList = withinRange5(agent, r, c)
-    for coord in coordList:
-        r, c = coord
-        if target.isAt(r,c):
-            return True
-    return False
 
 # agent = Agent(12)
 # y = withinRange5(agent,5,5)

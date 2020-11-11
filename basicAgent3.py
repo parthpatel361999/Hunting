@@ -58,7 +58,7 @@ def displayProbabilities(agent):
 
 
 total = 0
-numTrials = 100
+numTrials = 10
 dim = 10
 for i in range(numTrials):
     agent = Agent(dim)

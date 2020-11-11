@@ -28,6 +28,9 @@ def basicAgent2(agent, target):
             while i < agent.dim:
                 j = 0
                 while j < agent.dim:
+                        if i == prevr and j == prevc:
+                            j += 1
+                            continue
                     agent.map[i][j].probability = agent.map[i][j].probability / scale
                     agent.map[i][j].score = agent.map[i][j].probability * \
                         (1 - agent.map[i][j].falseNegativeProbability)

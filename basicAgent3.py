@@ -31,7 +31,7 @@ def basicAgent3(agent, target):
                         continue
                     agent.map[i][j].probability = agent.map[i][j].probability / scale
                     dist = manhattanDistance((prevr,prevc), (i,j))
-                    agent.map[i][j].score = float(dist) / (agent.map[i][j].probability * (1 - agent.map[i][j].falseNegativeProbability))
+                    agent.map[i][j].score = (1 + float(dist)) / (agent.map[i][j].probability * (1 - agent.map[i][j].falseNegativeProbability))
                     if minScore > agent.map[i][j].score:
                         minScore = agent.map[i][j].score
                         r = i

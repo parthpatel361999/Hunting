@@ -38,6 +38,7 @@ def basicAgent3(agent, target):
                         c = j
                     j = j + 1
                 i = i + 1
+            numActions((prevr, prevc), (r,c), agent)
 
     return agent.numMoves
 
@@ -57,7 +58,7 @@ def displayProbabilities(agent):
 
 
 total = 0
-numTrials = 1
+numTrials = 100
 dim = 10
 for i in range(numTrials):
     agent = Agent(dim)

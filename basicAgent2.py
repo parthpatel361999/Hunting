@@ -15,6 +15,8 @@ def basicAgent2(agent, target):
 
     while(agent.hasFoundTarget == False):
         maxP = 0
+        prevr = r
+        prevc = c
         searchResult = agent.searchCell(r, c, target)
         if searchResult == False:
             scale = 1 - agent.map[r][c].probability + \
@@ -36,6 +38,7 @@ def basicAgent2(agent, target):
                         c = j 
                     j += 1
                 i += 1
+            numActions((prevr, prevc), (r,c), agent)
         # print("probs:")
         # displayProbabilities(agent)
         # print("scores:")

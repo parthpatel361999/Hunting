@@ -18,12 +18,12 @@ def movingTarget1(agent, target):
         prevr = r
         prevc = c
         searchResult = agent.searchCell(r,c,target)
-        print('searched cell: ', (prevr,prevc))
-        print('Target Position: ', target.position)
+        #print('searched cell: ', (prevr,prevc))
+        #print('Target Position: ', target.position)
         
         if searchResult == False:
             withinFive = targetInRange(agent, target, prevr, prevc)
-            print('target in range? ', withinFive)
+            #print('target in range? ', withinFive)
             scale = 1 - agent.map[r][c].probability + agent.map[r][c].probability * agent.map[r][c].falseNegativeProbability
             agent.map[r][c].probability = agent.map[r][c].falseNegativeProbability * agent.map[r][c].probability
             i = 0
@@ -50,6 +50,7 @@ def movingTarget1(agent, target):
     return agent.numMoves
 
 # returns list of coords within Manhattan Distance of 5, including the original r,c
+# so the only thing wrong with this I don't want that original r,c in the list
 def withinRange5(agent, r, c, coordList=[], manD=0): 
     if r >= agent.dim or c >= agent.dim or r < 0 or c < 0:
         return []
@@ -69,6 +70,7 @@ def minInRange(agent, r, c):
     minScore = np.inf
     
     coordList = withinRange5(agent, r, c)
+    coordList.remove((r,c))
     #print(coordList)
     for coord in coordList:
         #print(coord)
@@ -84,6 +86,7 @@ def minInRange(agent, r, c):
 def minOutRange(agent, r, c):
     minScore = np.inf
     coordList = withinRange5(agent, r, c)
+    coordList.remove((r,c))
     i = 0
     while i < agent.dim:
         j = 0
@@ -112,7 +115,7 @@ def targetInRange(agent, target, r, c):
 # print(len(y))
 
 total = 0
-numTrials = 10
+numTrials = 100
 dim = 10
 for i in range(numTrials):
     agent = Agent(dim)

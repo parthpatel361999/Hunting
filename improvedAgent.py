@@ -56,7 +56,7 @@ def improvedAgent(agent, target):
             #assume r,c are going to prove to be false 
             agent2 = copy.deepcopy(agent) #create deep copy
             
-
+        
             scale = 1.0 - agent.map[r1][c1].probability + agent.map[r1][c1].probability * agent.map[r1][c1].falseNegativeProbability
             agent2.map[r1][c1].probability = agent2.map[r1][c1].falseNegativeProbability * agent2.map[r1][c1].probability
             
@@ -68,6 +68,8 @@ def improvedAgent(agent, target):
             fnrc = 1.0 - agent.map[r2][c2].falseNegativeProbability
             agent.map[r2][c2].score = float(dist) / ((agent.map[r2][c2].probability * fnrc) + (1-(agent.map[r2][c2].probability*fnrc)*prob))
             
+            #comparing raw scores might be better
+            
             #if(score1 < score2):
             if(agent.map[r1][c1].score < agent.map[r2][c2].score):
                 r = r1
@@ -75,6 +77,10 @@ def improvedAgent(agent, target):
             else: 
                 r = r2
                 c = c2
+            '''
+            r = r2 
+            c = c2
+            '''
             numActions((prevr, prevc), (r,c), agent)
     return agent.numMoves
 

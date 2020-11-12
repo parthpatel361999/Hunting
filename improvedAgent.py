@@ -3,7 +3,7 @@ import numpy as np
 import copy 
 from common import Agent, Target, numActions, manhattanDistance
 
-def simulateBA(agent,scale,r,c,it): 
+def simulateBA(agent,scale, r, c): 
     # current performance: iterating even 1 step into the future at every time step is causing failure.
     # this has to do with the fact that even when the probabilities are very high we still assume that there is a failure occuring
     # adding an addl conditional to check the prob value and skipping recursion if above thresh
@@ -26,22 +26,8 @@ def simulateBA(agent,scale,r,c,it):
                 new_c = j
             j = j + 1
         i = i + 1
-    
-    if(it < 1 and agent.map[r][c].probability < 0.2): 
-        '''
-            TODO change conditional to following form: A - B*x (obviously if this makes sense)
-            A = max iterations you allow on the first run through (ie we don't have enough info so we let the agent simulate several failures)
-            B = how gradual we want the descent to be. 
-            Other considerations: should B be a dynamic value? depending on the current performance, can we tweak this value? 
-        '''
-        nit = it
-        nit+=1
-        scale = 1.0 - agent.map[new_r][new_c].probability + agent.map[new_r][new_c].probability * agent.map[new_r][new_c].falseNegativeProbability
-        agent2 = copy.deepcopy(agent) #is there any way to not use a deep copy here? 
-        agent2.map[new_r][new_c].probability = agent2.map[new_r][new_c].falseNegativeProbability * agent2.map[new_r][new_c].probability
-        return simulateBA(agent2,scale,new_r,new_c,nit)
-    
-    return (new_r, new_c)
+    return (new_r, new_c,agent.map[new_r][new_c].probability)
+    #return (new_r, new_c,agent.map[new_r][new_c].score)
 
 
 def improvedAgent(agent, target):
@@ -63,7 +49,32 @@ def improvedAgent(agent, target):
         if searchResult == False:
             scale = 1.0 - agent.map[r][c].probability + agent.map[r][c].probability * agent.map[r][c].falseNegativeProbability
             agent.map[r][c].probability = agent.map[r][c].falseNegativeProbability * agent.map[r][c].probability
-            r,c = simulateBA(agent,scale,r,c,0)
+            
+            r1,c1,prob = simulateBA(agent,scale,r,c)
+            #r1,c1,score1 = simulateBA(agent,scale,r,c)
+            
+            #assume r,c are going to prove to be false 
+            agent2 = copy.deepcopy(agent) #create deep copy
+            
+
+            scale = 1.0 - agent.map[r1][c1].probability + agent.map[r1][c1].probability * agent.map[r1][c1].falseNegativeProbability
+            agent2.map[r1][c1].probability = agent2.map[r1][c1].falseNegativeProbability * agent2.map[r1][c1].probability
+            
+            r2,c2,prob = simulateBA(agent2,scale,r1,c1) #run the deep copy through the simulation
+            #r2,c2,score2 = simulateBA(agent2,scale,r1,c1)
+            
+            
+            dist = manhattanDistance((r,c), (r2,c2))
+            fnrc = 1.0 - agent.map[r2][c2].falseNegativeProbability
+            agent.map[r2][c2].score = float(dist) / ((agent.map[r2][c2].probability * fnrc) + (1-(agent.map[r2][c2].probability*fnrc)*prob))
+            
+            #if(score1 < score2):
+            if(agent.map[r1][c1].score < agent.map[r2][c2].score):
+                r = r1
+                c = c1
+            else: 
+                r = r2
+                c = c2
             numActions((prevr, prevc), (r,c), agent)
     return agent.numMoves
 
@@ -82,7 +93,7 @@ def displayProbabilities(agent):
 
 
 total = 0
-numTrials = 50
+numTrials = 100
 dim = 10
 for i in range(numTrials):
     agent = Agent(dim)

@@ -1,4 +1,5 @@
 import random as rnd
+import numpy as np
 
 
 class Target:
@@ -92,3 +93,89 @@ def manhattanDistance(position1, position2):
 def numActions(initCoords, destination, agent):
     numMoves = manhattanDistance(initCoords, destination)
     agent.numMoves += numMoves
+
+'''
+    Returns list of cells that are within manhattan distance of five away from start cell
+'''
+def withinRange5(agent, r, c, coordList=[], manD=0): 
+    if r >= agent.dim or c >= agent.dim or r < 0 or c < 0:
+        return []
+    elif manD > 5:
+        return []
+    else:
+        if not (r,c) in coordList:
+            coordList.append((r,c))
+    withinRange5(agent, r+1, c, coordList, manD + 1)
+    withinRange5(agent, r-1, c, coordList, manD + 1)
+    withinRange5(agent, r, c+1, coordList, manD + 1)
+    withinRange5(agent, r, c-1, coordList, manD + 1)
+    
+    return coordList
+
+def at6(agent, r, c, coordList=[], manD=0): # we are not sure if this function should be all cells within 6 or just the border cells of distance 6
+    if r >= agent.dim or c >= agent.dim or r < 0 or c < 0:
+        return []
+    elif manD > 6:
+        return []
+    else:
+        if not (r,c) in coordList:
+            coordList.append((r,c))
+
+    at6(agent, r+1, c, coordList, manD + 1)
+    at6(agent, r-1, c, coordList, manD + 1)
+    at6(agent, r, c+1, coordList, manD + 1)
+    at6(agent, r, c-1, coordList, manD + 1)
+
+    return coordList
+
+'''
+    If the target is w/in 5, search those cells to find minProb to find next cell to search
+'''
+def minInRange(agent, r, c, f = withinRange5):
+    minScore = np.inf
+    
+    coordList = f(agent, r, c)
+    coordList.remove((r,c))
+    #print(coordList)
+    for coord in coordList:
+        #print(coord)
+        (r, c) = coord
+        if agent.map[r][c].score < minScore:
+            minScore = agent.map[r][c].score
+            minR = r
+            minC = c
+
+
+    return minScore, minR, minC
+
+'''
+    If the target is not w/in 5, search cells that are not in that distance to find next lowest cell
+'''
+def minOutRange(agent, r, c):
+    minScore = np.inf
+    coordList = withinRange5(agent, r, c)
+    coordList.remove((r,c))
+    i = 0
+    while i < agent.dim:
+        j = 0
+        while j < agent.dim:
+            if (i,j) in coordList or (i,j) == (r,c):
+                j+=1
+                continue
+            if agent.map[i][j].score < minScore :
+                minScore = agent.map[i][j].score
+                minR = i
+                minC = j
+            j+=1
+        i+=1 
+    return minScore, minR, minC
+'''
+    Returns whether the target is within Manhattan Distance 5 of start cell
+'''
+def targetInRange(agent, target, r, c):
+    coordList = withinRange5(agent, r, c)
+    for coord in coordList:
+        r, c = coord
+        if target.isAt(r,c):
+            return True
+    return False

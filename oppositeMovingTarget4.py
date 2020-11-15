@@ -58,6 +58,7 @@ def improvedAgent(agent, target,thresh=0.2):
            
             if(r == -1 and c == -1): 
                 break
+            target.move(theWay(r,c,findNeighbors(target.position[0],target.position[1],agent.dim)))
 
     return agent.numMoves
 

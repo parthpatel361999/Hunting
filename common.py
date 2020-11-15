@@ -179,3 +179,22 @@ def targetInRange(agent, target, r, c):
         if target.isAt(r,c):
             return True
     return False
+
+
+''' In part 3 of our assignment, the target needs to move the opposite way that the agent came. in this case 
+    that is max manhattan distance between all the potential neighbors of the target and the new location of 
+    the agent '''
+
+def theWay(r,c,neighbors): 
+    maxC = -1
+    maxR = -1
+    for i in neighbors:
+        if(maxC == -1 and maxR == -1):
+            maxR = i[0]
+            maxC = i[1]
+        else:
+            if(manhattanDistance((r,c),(i[0],i[1])) > manhattanDistance((r,c),(maxC,maxR))):
+                maxR = i[0]
+                maxC = i[1]
+    return (maxR,maxC)
+    

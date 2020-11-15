@@ -2,7 +2,7 @@ import random as rnd
 import numpy as np
 import copy 
 from queue import PriorityQueue 
-from common import Agent, Target, numActions, manhattanDistance, targetInRange, minInRange, minOutRange, withinRange5, at6
+from common import Agent, Target, numActions, manhattanDistance, targetInRange, minInRange, minOutRange, withinRange5, at6,theWay,findNeighbors
 
 def ba3(agent, r, c): 
     scale = 1.0 - agent.map[r][c].probability + agent.map[r][c].probability * agent.map[r][c].falseNegativeProbability

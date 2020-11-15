@@ -1,23 +1,11 @@
-from common import Agent, Target, numActions, manhattanDistance, findNeighbors
+from common import Agent, Target, numActions, manhattanDistance, findNeighbors,theWay,findNeighbors
 import random as rnd
 import numpy as np
 
 '''
     to be compared to rule 2, so used the rule two probability updates
 '''
-def theWay(r,c,neighbors): 
-    maxC = -1
-    maxR = -1
-    for i in neighbors:
-        if(maxC == -1 and maxR == -1):
-            maxR = i[0]
-            maxC = i[1]
-        else:
-            if(manhattanDistance((r,c),(i[0],i[1])) > manhattanDistance((r,c),(maxC,maxR))):
-                maxR = i[0]
-                maxC = i[1]
-    return (maxR,maxC)
-    
+
 
 def movingTarget3(agent, target):
     highest = 0

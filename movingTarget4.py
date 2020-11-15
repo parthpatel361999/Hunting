@@ -29,7 +29,7 @@ def ba3(agent, r, c):
     return (new_r, new_c)
 
 
-def improvedAgent(agent, target,thresh):
+def improvedAgent(agent, target,thresh=0.2):
     highest = 0
     r = c = 0
     for row in agent.map:
@@ -163,7 +163,7 @@ def pathwalk(prevr,prevc,r,c):
 
     return path1,path2
 
-def findHighestinRoom(agent,path,thresh):
+def findHighestinRoom(agent,path,thresh=0.2):
     #path has following format: [coord1,coord2] where coord = (row,col)
     highestPath = []
     probHighs = []
@@ -201,18 +201,15 @@ numTrials = 100
 dim = 10
 total = 0
 j = 0.1
-while j <= 1:  #j <= 0 to quickly compare to BA3
-    total = 0
-    for i in range(numTrials):
-        agent = Agent(dim)
+for i in range(numTrials):
+    agent = Agent(dim)
+    target = Target(dim)
+    while agent.map[target.position[0]][target.position[1]].falseNegativeProbability == 0.9:
         target = Target(dim)
-        while agent.map[target.position[0]][target.position[1]].falseNegativeProbability == 0.9:
-            target = Target(dim)
-        # for r in agent.map:
-        #     for cell in r:
-        #         print(cell.falseNegativeProbability, end='  ')
-        #     print()
-        # print(target.position)
-        total += improvedAgent(agent, target,j)
-    print("Average Moves Taken at threshold value " + str(j) + " : " + str(float(total / numTrials)))
-    j+=0.1
+    # for r in agent.map:
+    #     for cell in r:
+    #         print(cell.falseNegativeProbability, end='  ')
+    #     print()
+    # print(target.position)
+    total += improvedAgent(agent, target)
+print("Average Moves Taken at threshold value " + str(0.2) + " : " + str(float(total / numTrials)))

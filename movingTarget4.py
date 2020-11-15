@@ -58,6 +58,7 @@ def improvedAgent(agent, target,thresh=0.2):
            
             if(r == -1 and c == -1): 
                 break
+            target.move()
 
     return agent.numMoves
 
@@ -206,7 +207,7 @@ def displayProbabilities(agent):
         print()
 
 
-numTrials = 100
+numTrials = 1
 dim = 10
 total = 0
 j = 0.1

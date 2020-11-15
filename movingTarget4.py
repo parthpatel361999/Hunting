@@ -74,7 +74,7 @@ def improvement(agent,target,r,c,prevr,prevc,thresh=0.2):
     if path1 == path2:
         path = path1
         pathHighs = findHighestinRoom(agent, path, thresh)
-    else:
+    elif(path1 and path2):
     #highest probability path
         path1probs, pathHigh1 = findHighestinRoom(agent,path1,thresh)
         path2probs, pathHigh2 = findHighestinRoom(agent, path2, thresh)
@@ -84,6 +84,14 @@ def improvement(agent,target,r,c,prevr,prevc,thresh=0.2):
         else:
             path = path2
             pathHighs = pathHigh2
+    elif(path1 and not path2):
+        path = path1
+        pathHighs = pathHigh1
+    elif(not path1 and path2):
+        path = path2
+        pathHighs = pathHigh2
+    else: 
+        return (r,c)
         
     #walkthrough the path
     i = 0
@@ -176,8 +184,9 @@ def findHighestinRoom(agent,path,thresh=0.2):
     totalpop = 1
     while(totalpop > 0):
         temp = q.get()
-        probHighs.append(temp[0])
-        highestPath.append(temp[1])
+        if(temp[0] >= thresh):
+            probHighs.append(temp[0])
+            highestPath.append(temp[1])
         totalpop-=1
     # print(probHighs)
     # print(highestPath)
@@ -201,15 +210,16 @@ numTrials = 100
 dim = 10
 total = 0
 j = 0.1
-for i in range(numTrials):
-    agent = Agent(dim)
-    target = Target(dim)
-    while agent.map[target.position[0]][target.position[1]].falseNegativeProbability == 0.9:
+while (j <= 1.0):
+    total = 0
+    for i in range(numTrials):
+        agent = Agent(dim)
         target = Target(dim)
-    # for r in agent.map:
-    #     for cell in r:
-    #         print(cell.falseNegativeProbability, end='  ')
-    #     print()
-    # print(target.position)
-    total += improvedAgent(agent, target)
-print("Average Moves Taken at threshold value " + str(0.2) + " : " + str(float(total / numTrials)))
+        # for r in agent.map:
+        #     for cell in r:
+        #         print(cell.falseNegativeProbability, end='  ')
+        #     print()
+        # print(target.position)
+        total += improvedAgent(agent, target,j)
+    print("Average Moves Taken at threshold value " + str(j) + " : " + str(float(total / numTrials)))
+    j+=0.1

@@ -126,7 +126,7 @@ def targetInRange(agent, target, r, c):
 # print(len(y))
 
 total = 0
-numTrials = 10
+numTrials = 100
 dim = 10
 for i in range(numTrials):
     agent = Agent(dim)

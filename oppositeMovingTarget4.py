@@ -58,7 +58,11 @@ def improvedAgent(agent, target,thresh=0.2):
            
             if(r == -1 and c == -1): 
                 break
+<<<<<<< HEAD:oppositeMovingTarget4.py
             target.move(theWay(r,c,findNeighbors(target.position[0],target.position[1],agent.dim)))
+=======
+            target.move()
+>>>>>>> part-2-2:movingTarget4.py
 
     return agent.numMoves
 
@@ -207,7 +211,7 @@ def displayProbabilities(agent):
         print()
 
 
-numTrials = 100
+numTrials = 1
 dim = 10
 total = 0
 j = 0.1

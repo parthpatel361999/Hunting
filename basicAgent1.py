@@ -26,7 +26,7 @@ def basicAgent1(agent, target):
                         c = j
                     j += 1
                 i += 1
-            numActions((prevr, prevc), (r,c), agent)
+            #numActions((prevr, prevc), (r,c), agent)
         
         # displayProbabilities(agent)
         # print()
@@ -40,11 +40,12 @@ def displayProbabilities(agent):
 
 total = 0
 numTrials = 100
+dim = 10
 for i in range(numTrials):
-    agent = Agent(10)
-    target = Target(10)
+    agent = Agent(dim)
+    target = Target(dim)
     while agent.map[target.position[0]][target.position[1]].falseNegativeProbability == 0.9:
-        target = Target(10)
+        target = Target(dim)
     # for r in agent.map:
     #     for cell in r:
     #         print(cell.falseNegativeProbability, end='  ')

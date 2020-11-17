@@ -3,7 +3,7 @@ import random as rnd
 from common import Agent, Target, numActions
 
 
-def basicAgent2(agent, target):
+def rule2MAST(agent, target):
     highest = 0
     r = c = 0
     for row in agent.map:
@@ -36,9 +36,9 @@ def basicAgent2(agent, target):
                         (1 - agent.map[i][j].falseNegativeProbability)
                     if agent.map[i][j].score > maxP:
                         maxP = agent.map[i][j].score
-                        numActions((r,c), (i,j), agent)
+                        numActions((r, c), (i, j), agent)
                         r = i
-                        c = j 
+                        c = j
                     j += 1
                 i += 1
             #numActions((prevr, prevc), (r,c), agent)
@@ -51,32 +51,30 @@ def basicAgent2(agent, target):
     return agent.numMoves
 
 
-def displayScores(agent):
-    for r in agent.map:
-        for cell in r:
-            print("{:.5f}".format(cell.score), end='  ')
-        print()
+# def displayScores(agent):
+#     for r in agent.map:
+#         for cell in r:
+#             print("{:.5f}".format(cell.score), end='  ')
+#         print()
 
 
-def displayProbabilities(agent):
-    for r in agent.map:
-        for cell in r:
-            print("{:.5f}".format(cell.probability), end='  ')
-        print()
+# def displayProbabilities(agent):
+#     for r in agent.map:
+#         for cell in r:
+#             print("{:.5f}".format(cell.probability), end='  ')
+#         print()
 
 
-total = 0
-numTrials = 100
-dim = 10
-for i in range(numTrials):
-    agent = Agent(dim)
-    target = Target(dim)
-    while agent.map[target.position[0]][target.position[1]].falseNegativeProbability == 0.9:
-        target = Target(dim)
-    # for r in agent.map:
-    #     for cell in r:
-    #         print(cell.falseNegativeProbability, end='  ')
-    #     print()
-    # print(target.position)
-    total += basicAgent2(agent, target)
-print("Average Moves Taken: " + str(float(total / numTrials)))
+# total = 0
+# numTrials = 1
+# dim = 50
+# for i in range(numTrials):
+#     agent = Agent(dim)
+#     target = Target(dim)
+#     # for r in agent.map:
+#     #     for cell in r:
+#     #         print(cell.falseNegativeProbability, end='  ')
+#     #     print()
+#     # print(target.position)
+#     total += rule2MAST(agent, target)
+# print("Average Moves Taken: " + str(float(total / numTrials)))

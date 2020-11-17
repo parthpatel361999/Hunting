@@ -1,3 +1,4 @@
+import copy
 import random as rnd
 
 import numpy as np
@@ -44,10 +45,21 @@ class Agent:
             self.map.append(mapRow)
         self.currentPosition = (-1, -1)
         self.numMoves = 0
+        self.searches = 0
+        self.movements = 0
+
+    def reset(self, map=[]):
+        self.map = copy.deepcopy(map)
+        self.hasFoundTarget = False
+        self.currentPosition = (-1, -1)
+        self.numMoves = 0
+        self.searches = 0
+        self.movements = 0
 
     def searchCell(self, row, col, target):
         self.currentPosition = (row, col)
         self.numMoves += 1
+        self.searches += 1
         if not target.isAt(row, col):
             return False
         else:
@@ -63,6 +75,7 @@ class Agent:
     def move(self, row, col):
         self.currentPosition = (row, col)
         self.numMoves += 1
+        self.movements += 1
 
 
 class Cell:
@@ -94,6 +107,7 @@ def manhattanDistance(position1, position2):
 
 def numActions(initCoords, destination, agent):
     numMoves = manhattanDistance(initCoords, destination)
+    agent.movements += numMoves
     agent.numMoves += numMoves
 
 

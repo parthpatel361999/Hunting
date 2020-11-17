@@ -4,9 +4,9 @@ from queue import PriorityQueue
 
 import numpy as np
 
-from common import (Agent, Target, at6, findNeighbors, manhattanDistance,
-                    minInRange, minOutRange, numActions, targetInRange, theWay,
-                    withinRange5)
+from common import (Agent, Target, at6, manhattanDistance, minInRange,
+                    minOutRange, numActions, targetInRange, withinRange5)
+from improvedMAST import improvementMAST
 
 
 def ba3(agent, r, c):
@@ -37,7 +37,7 @@ def ba3(agent, r, c):
     return (new_r, new_c)
 
 
-def improvedAgent(agent, target, thresh=0.2):
+def improvedMAMTWithClue(agent, target, thresh=0.2):
     highest = 0
     r = c = 0
     for row in agent.map:
@@ -64,18 +64,43 @@ def improvedAgent(agent, target, thresh=0.2):
             else:  # if within 5
                 # find best score in cells within 5
                 minScore, r, c = minInRange(agent, prevr, prevc)
-                r, c = improvement(agent, target, r, c, prevr,
-                                   prevc)  # run improvement
+                r, c = improvementMAMT(agent, target, r, c, prevr,
+                                       prevc)  # run improvement
 
             if(r == -1 and c == -1):
                 break
-            target.move(theWay(r, c, findNeighbors(
-                target.position[0], target.position[1], agent.dim)))
+            target.move()
 
     return agent.numMoves
 
 
-def improvement(agent, target, r, c, prevr, prevc, thresh=0.2):
+def improvedMAMTWithoutClue(agent, target, thresh=0.2):
+    highest = 0
+    r = c = 0
+    for row in agent.map:
+        for cell in row:
+            cell.score = cell.probability * (1 - cell.falseNegativeProbability)
+            # dist = float(manhattanDistance((r,c), (i,j)))
+            # agent.map[i][j].score = dist / agent.map[i][j].score
+            if cell.score > highest:
+                highest = cell.score
+                r, c = cell.row, cell.col
+
+    while (agent.hasFoundTarget == False):
+        prevr = r
+        prevc = c
+        searchResult = agent.searchCell(r, c, target)
+        if searchResult == False:
+            r, c = ba3(agent, r, c)
+            r, c = improvementMAST(agent, target, r, c, prevr, prevc, thresh)
+            if(r == -1 and c == -1):
+                break
+            target.move()
+
+    return agent.numMoves
+
+
+def improvementMAMT(agent, target, r, c, prevr, prevc, thresh=0.2):
     pathHighs = []
     # check if recommended same location
     if(r == prevr and c == prevc):
@@ -84,14 +109,14 @@ def improvement(agent, target, r, c, prevr, prevc, thresh=0.2):
         return ret_r, ret_c
 
     # generate path
-    path1, path2 = pathwalk(prevr, prevc, r, c)
+    path1, path2 = pathwalkMAMT(prevr, prevc, r, c)
     if path1 == path2:
         path = path1
-        pathHighs = findHighestinRoom(agent, path, thresh)
+        pathHighs = findHighestinRoomMAMT(agent, path, thresh)
     elif(path1 and path2):
         # highest probability path
-        path1probs, pathHigh1 = findHighestinRoom(agent, path1, thresh)
-        path2probs, pathHigh2 = findHighestinRoom(agent, path2, thresh)
+        path1probs, pathHigh1 = findHighestinRoomMAMT(agent, path1, thresh)
+        path2probs, pathHigh2 = findHighestinRoomMAMT(agent, path2, thresh)
         # check this conditional because of the whole 1 - prob thing for the queue
         if path1probs[0] <= path2probs[0]:
             path = path1
@@ -140,7 +165,7 @@ def improvement(agent, target, r, c, prevr, prevc, thresh=0.2):
         return (-1, -1)
 
 
-def pathwalk(prevr, prevc, r, c):
+def pathwalkMAMT(prevr, prevc, r, c):
     # L-shaped trajectory
     path1 = []
     path2 = []
@@ -191,7 +216,7 @@ def pathwalk(prevr, prevc, r, c):
     return path1, path2
 
 
-def findHighestinRoom(agent, path, thresh=0.2):
+def findHighestinRoomMAMT(agent, path, thresh=0.2):
     # path has following format: [coord1,coord2] where coord = (row,col)
     highestPath = []
     probHighs = []
@@ -213,35 +238,35 @@ def findHighestinRoom(agent, path, thresh=0.2):
     return probHighs, highestPath  # return list of tuples
 
 
-def displayScores(agent):
-    for r in agent.map:
-        for cell in r:
-            print("{:.5f}".format(cell.score), end='  ')
-        print()
+# def displayScores(agent):
+#     for r in agent.map:
+#         for cell in r:
+#             print("{:.5f}".format(cell.score), end='  ')
+#         print()
 
 
-def displayProbabilities(agent):
-    for r in agent.map:
-        for cell in r:
-            print("{:.5f}".format(cell.probability), end='  ')
-        print()
+# def displayProbabilities(agent):
+#     for r in agent.map:
+#         for cell in r:
+#             print("{:.5f}".format(cell.probability), end='  ')
+#         print()
 
 
-numTrials = 1
-dim = 10
-total = 0
-j = 0.1
-while (j <= 1.0):
-    total = 0
-    for i in range(numTrials):
-        agent = Agent(dim)
-        target = Target(dim)
-        # for r in agent.map:
-        #     for cell in r:
-        #         print(cell.falseNegativeProbability, end='  ')
-        #     print()
-        # print(target.position)
-        total += improvedAgent(agent, target, j)
-    print("Average Moves Taken at threshold value " +
-          str(j) + " : " + str(float(total / numTrials)))
-    j += 0.1
+# numTrials = 1
+# dim = 10
+# total = 0
+# j = 0.1
+# while (j <= 1.0):
+#     total = 0
+#     for i in range(numTrials):
+#         agent = Agent(dim)
+#         target = Target(dim)
+#         # for r in agent.map:
+#         #     for cell in r:
+#         #         print(cell.falseNegativeProbability, end='  ')
+#         #     print()
+#         # print(target.position)
+#         total += improvedAgent(agent, target, j)
+#     print("Average Moves Taken at threshold value " +
+#           str(j) + " : " + str(float(total / numTrials)))
+#     j += 0.1

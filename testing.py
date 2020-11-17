@@ -47,6 +47,7 @@ def testRules(rules, dim=50, maps=30, iterationsPerMap=30):
         agent = Agent(dim)
         fixedMap = copy.deepcopy(agent.map)
         target = Target(dim)
+        targetStartingPosition = target.position
 
         for j in range(0, iterationsPerMap):
             startTimeInner = time.time()
@@ -58,11 +59,13 @@ def testRules(rules, dim=50, maps=30, iterationsPerMap=30):
                 actionTotals[rule.__name__].append(
                     agent.searches + agent.movements)
                 agent.reset(fixedMap)
+                target.move(targetStartingPosition)
 
             _target = Target(dim)
-            while _target.position == target.position:
+            while _target.position == targetStartingPosition:
                 _target = Target(dim)
             target = _target
+            targetStartingPosition = target.position
 
             print("\tMap", str(i), "iteration", str(j), "took",
                   str(time.time() - startTimeInner), "seconds")

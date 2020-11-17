@@ -1,5 +1,6 @@
 import copy
 import time
+from datetime import datetime
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -22,20 +23,30 @@ from rule3MAST import rule3MAST
 def testRules(rules, dim=50, maps=30, iterationsPerMap=30):
     averageSearches = {}
     averageMovements = {}
+    averageActions = {}
+    actionMeans = {}
+    actionVariances = {}
     for rule in rules:
         averageSearches[rule.__name__] = []
         averageMovements[rule.__name__] = []
+        averageActions[rule.__name__] = []
+        actionMeans[rule.__name__] = []
+        actionVariances[rule.__name__] = []
 
     for i in range(0, maps):
         startTime = time.time()
-        agent = Agent(dim)
-        fixedMap = copy.deepcopy(agent.map)
-        target = Target(dim)
+
         searchTotals = {}
         movementTotals = {}
+        actionTotals = {}
         for rule in rules:
             searchTotals[rule.__name__] = 0
             movementTotals[rule.__name__] = 0
+            actionTotals[rule.__name__] = []
+
+        agent = Agent(dim)
+        fixedMap = copy.deepcopy(agent.map)
+        target = Target(dim)
 
         for j in range(0, iterationsPerMap):
             startTimeInner = time.time()
@@ -44,6 +55,8 @@ def testRules(rules, dim=50, maps=30, iterationsPerMap=30):
                 rule(agent, target)
                 searchTotals[rule.__name__] += agent.searches
                 movementTotals[rule.__name__] += agent.movements
+                actionTotals[rule.__name__].append(
+                    agent.searches + agent.movements)
                 agent.reset(fixedMap)
 
             _target = Target(dim)
@@ -59,24 +72,50 @@ def testRules(rules, dim=50, maps=30, iterationsPerMap=30):
                 searchTotals[rule.__name__] / iterationsPerMap)
             averageMovements[rule.__name__].append(
                 movementTotals[rule.__name__] / iterationsPerMap)
+            averageActions[rule.__name__].append(
+                (searchTotals[rule.__name__] + movementTotals[rule.__name__]) / iterationsPerMap)
+            actionMeans[rule.__name__].append(
+                np.average(actionTotals[rule.__name__]))
+            actionVariances[rule.__name__].append(
+                np.var(actionTotals[rule.__name__]))
+
         print("Map", str(i), "took", str(time.time() - startTime), "seconds")
 
-    return averageSearches, averageMovements
+    return averageSearches, averageMovements, averageActions, actionMeans, actionVariances
+
+
+def writeToFile(testNum, dataFile, rules, testMeans, testVariances, testActions):
+    dataFile.write("\nTEST" + str(testNum) + "\n")
+    for rule in rules:
+        dataFile.write("\t" + rule.__name__ + "\n")
+        for i in range(0, maps):
+            dataFile.write("\t\t" + str(testMeans[rule.__name__][i]) + ", " + str(
+                testVariances[rule.__name__][i]) + "\n")
+        dataFile.write("\tOVERALL: " + str(np.average(testActions[rule.__name__])) +
+                       ", " + str(np.var(testActions[rule.__name__])) + "\n")
+    dataFile.write("\n")
 
 
 if __name__ == "__main__":
 
-    dim = 50
+    dim = 30
     maps = 30
     iterationsPerMap = 30
     ind = np.arange(maps)
     width = 0.2
 
+    dataFile = open("graphs/data.txt", "a")
+    dataFile.write("******************************\n")
+    dataFile.write("START TEST " +
+                   datetime.now().strftime("%m/%d/%Y %H:%M:%S") + "\n")
+    dataFile.write("******************************\n")
+
     """
     Part 1-3
     """
     rules = [rule1SAST, rule2SAST]
-    testSearches, testMovements = testRules(rules, dim, maps, iterationsPerMap)
+    testSearches, testMovements, testActions, testMeans, testVariances = testRules(
+        rules, dim, maps, iterationsPerMap)
     figure = plt.figure(figsize=((10., 6.)))
     plt.bar(
         ind, testSearches[rule1SAST.__name__], width, label="Rule 1 Searches", color="red")
@@ -89,12 +128,14 @@ if __name__ == "__main__":
     plt.legend(loc="best")
     plt.savefig("graphs/1.png")
     plt.close(figure)
+    writeToFile(1, dataFile, rules, testMeans, testVariances, testActions)
 
     """
     Part 1-4
     """
     rules = [rule1MAST, rule2MAST, rule3MAST, improvedMAST]
-    testSearches, testMovements = testRules(rules, dim, maps, iterationsPerMap)
+    testSearches, testMovements, testActions, testMeans, testVariances = testRules(
+        rules, dim, maps, iterationsPerMap)
     figure = plt.figure(figsize=((10., 6.)))
     plt.bar(
         ind, testSearches[rule1MAST.__name__], width, label="Rule 1 Searches", bottom=testMovements[rule1MAST.__name__], color="red")
@@ -119,13 +160,15 @@ if __name__ == "__main__":
     plt.legend(loc="best")
     plt.savefig("graphs/2.png")
     plt.close(figure)
+    writeToFile(2, dataFile, rules, testMeans, testVariances, testActions)
 
     """
     Part 2-1
     """
     rules = [rule1SAMTWithoutClue, rule1SAMTWithClue,
              rule2SAMTWithoutClue, rule2SAMTWithClue]
-    testSearches, testMovements = testRules(rules, dim, maps, iterationsPerMap)
+    testSearches, testMovements, testActions, testMeans, testVariances = testRules(
+        rules, dim, maps, iterationsPerMap)
     figure = plt.figure(figsize=((10., 6.)))
     plt.bar(
         ind, testSearches[rule1SAMTWithoutClue.__name__], width, label="Rule 1 Searches (No Clue)", color="red")
@@ -142,13 +185,15 @@ if __name__ == "__main__":
     plt.legend(loc="best")
     plt.savefig("graphs/3.png")
     plt.close(figure)
+    writeToFile(3, dataFile, rules, testMeans, testVariances, testActions)
 
     """
     Part 2-2
     """
     rules = [rule3MAMTWithoutClue, rule3MAMTWithClue,
              improvedMAMTWithoutClue, improvedMAMTWithClue]
-    testSearches, testMovements = testRules(rules, dim, maps, iterationsPerMap)
+    testSearches, testMovements, testActions, testMeans, testVariances = testRules(
+        rules, dim, maps, iterationsPerMap)
     figure = plt.figure(figsize=((10., 6.)))
     plt.bar(
         ind, testSearches[rule3MAMTWithoutClue.__name__], width, label="Rule 3 Searches (No Clue)", bottom=testMovements[rule3MAMTWithoutClue.__name__], color="red")
@@ -173,13 +218,15 @@ if __name__ == "__main__":
     plt.legend(loc="best")
     plt.savefig("graphs/4.png")
     plt.close(figure)
+    writeToFile(4, dataFile, rules, testMeans, testVariances, testActions)
 
     """
     Part Extra
     """
     rules = [rule3MAMTWithClue, rule3MAMTExtra,
              improvedMAMTWithClue, improvedMAMTExtra]
-    testSearches, testMovements = testRules(rules, dim, maps, iterationsPerMap)
+    testSearches, testMovements, testActions, testMeans, testVariances = testRules(
+        rules, dim, maps, iterationsPerMap)
     figure = plt.figure(figsize=((10., 6.)))
     plt.bar(
         ind, testSearches[rule3MAMTWithClue.__name__], width, label="Rule 3 Searches (w/ Clue)", bottom=testMovements[rule3MAMTWithClue.__name__], color="red")
@@ -204,3 +251,7 @@ if __name__ == "__main__":
     plt.legend(loc="best")
     plt.savefig("graphs/5.png")
     plt.close(figure)
+    writeToFile(5, dataFile, rules, testMeans, testVariances, testActions)
+
+    dataFile.write("\n\n")
+    dataFile.close()

@@ -130,128 +130,128 @@ if __name__ == "__main__":
     plt.close(figure)
     writeToFile(1, dataFile, rules, testMeans, testVariances, testActions)
 
-    """
-    Part 1-4
-    """
-    rules = [rule1MAST, rule2MAST, rule3MAST, improvedMAST]
-    testSearches, testMovements, testActions, testMeans, testVariances = testRules(
-        rules, dim, maps, iterationsPerMap)
-    figure = plt.figure(figsize=((10., 6.)))
-    plt.bar(
-        ind, testSearches[rule1MAST.__name__], width, label="Rule 1 Searches", bottom=testMovements[rule1MAST.__name__], color="red")
-    plt.bar(
-        ind, testMovements[rule1MAST.__name__], width, label="Rule 1 Movements", color="darkred")
-    plt.bar(ind + width,
-            testSearches[rule2MAST.__name__], width, label="Rule 2 Searches", bottom=testMovements[rule2MAST.__name__], color="gold")
-    plt.bar(ind + width,
-            testMovements[rule2MAST.__name__], width, label="Rule 2 Movements", color="goldenrod")
-    plt.bar(
-        ind + width * 2, testSearches[rule3MAST.__name__], width, label="Rule 3 Searches", bottom=testMovements[rule3MAST.__name__], color="lightgreen")
-    plt.bar(
-        ind + width * 2, testMovements[rule3MAST.__name__], width, label="Rule 3 Movements", color="green")
-    plt.bar(ind + width * 3,
-            testSearches[improvedMAST.__name__], width, label="Improved Agent Searches", bottom=testMovements[improvedMAST.__name__], color="blue")
-    plt.bar(ind + width * 3,
-            testMovements[improvedMAST.__name__], width, label="Improved Agent Movements", color="darkblue")
-    plt.ylabel("Actions")
-    plt.xlabel("Map")
-    plt.title("Moving Agent, Stationary Target")
-    plt.xticks(ind + width * 1.5, list(range(1, maps + 1)))
-    plt.legend(loc="best")
-    plt.savefig("graphs/2.png")
-    plt.close(figure)
-    writeToFile(2, dataFile, rules, testMeans, testVariances, testActions)
+    # """
+    # Part 1-4
+    # """
+    # rules = [rule1MAST, rule2MAST, rule3MAST, improvedMAST]
+    # testSearches, testMovements, testActions, testMeans, testVariances = testRules(
+    #     rules, dim, maps, iterationsPerMap)
+    # figure = plt.figure(figsize=((10., 6.)))
+    # plt.bar(
+    #     ind, testSearches[rule1MAST.__name__], width, label="Rule 1 Searches", bottom=testMovements[rule1MAST.__name__], color="red")
+    # plt.bar(
+    #     ind, testMovements[rule1MAST.__name__], width, label="Rule 1 Movements", color="darkred")
+    # plt.bar(ind + width,
+    #         testSearches[rule2MAST.__name__], width, label="Rule 2 Searches", bottom=testMovements[rule2MAST.__name__], color="gold")
+    # plt.bar(ind + width,
+    #         testMovements[rule2MAST.__name__], width, label="Rule 2 Movements", color="goldenrod")
+    # plt.bar(
+    #     ind + width * 2, testSearches[rule3MAST.__name__], width, label="Rule 3 Searches", bottom=testMovements[rule3MAST.__name__], color="lightgreen")
+    # plt.bar(
+    #     ind + width * 2, testMovements[rule3MAST.__name__], width, label="Rule 3 Movements", color="green")
+    # plt.bar(ind + width * 3,
+    #         testSearches[improvedMAST.__name__], width, label="Improved Agent Searches", bottom=testMovements[improvedMAST.__name__], color="blue")
+    # plt.bar(ind + width * 3,
+    #         testMovements[improvedMAST.__name__], width, label="Improved Agent Movements", color="darkblue")
+    # plt.ylabel("Actions")
+    # plt.xlabel("Map")
+    # plt.title("Moving Agent, Stationary Target")
+    # plt.xticks(ind + width * 1.5, list(range(1, maps + 1)))
+    # plt.legend(loc="best")
+    # plt.savefig("graphs/2.png")
+    # plt.close(figure)
+    # writeToFile(2, dataFile, rules, testMeans, testVariances, testActions)
 
-    """
-    Part 2-1
-    """
-    rules = [rule1SAMTWithoutClue, rule1SAMTWithClue,
-             rule2SAMTWithoutClue, rule2SAMTWithClue]
-    testSearches, testMovements, testActions, testMeans, testVariances = testRules(
-        rules, dim, maps, iterationsPerMap)
-    figure = plt.figure(figsize=((10., 6.)))
-    plt.bar(
-        ind, testSearches[rule1SAMTWithoutClue.__name__], width, label="Rule 1 Searches (No Clue)", color="red")
-    plt.bar(ind + width,
-            testSearches[rule1SAMTWithClue.__name__], width, label="Rule 1 Searches (w/ Clue)", color="gold")
-    plt.bar(
-        ind + width * 2, testSearches[rule2SAMTWithoutClue.__name__], width, label="Rule 2 Searches (No Clue)", color="lightgreen")
-    plt.bar(ind + width * 3,
-            testSearches[rule2SAMTWithClue.__name__], width, label="Rule 2 Searches (w/ Clue)", color="green")
-    plt.ylabel("Actions")
-    plt.xlabel("Map")
-    plt.title("Stationary Agent, Moving Target")
-    plt.xticks(ind + width * 1.5, list(range(1, maps + 1)))
-    plt.legend(loc="best")
-    plt.savefig("graphs/3.png")
-    plt.close(figure)
-    writeToFile(3, dataFile, rules, testMeans, testVariances, testActions)
+    # """
+    # Part 2-1
+    # """
+    # rules = [rule1SAMTWithoutClue, rule1SAMTWithClue,
+    #          rule2SAMTWithoutClue, rule2SAMTWithClue]
+    # testSearches, testMovements, testActions, testMeans, testVariances = testRules(
+    #     rules, dim, maps, iterationsPerMap)
+    # figure = plt.figure(figsize=((10., 6.)))
+    # plt.bar(
+    #     ind, testSearches[rule1SAMTWithoutClue.__name__], width, label="Rule 1 Searches (No Clue)", color="red")
+    # plt.bar(ind + width,
+    #         testSearches[rule1SAMTWithClue.__name__], width, label="Rule 1 Searches (w/ Clue)", color="gold")
+    # plt.bar(
+    #     ind + width * 2, testSearches[rule2SAMTWithoutClue.__name__], width, label="Rule 2 Searches (No Clue)", color="lightgreen")
+    # plt.bar(ind + width * 3,
+    #         testSearches[rule2SAMTWithClue.__name__], width, label="Rule 2 Searches (w/ Clue)", color="green")
+    # plt.ylabel("Actions")
+    # plt.xlabel("Map")
+    # plt.title("Stationary Agent, Moving Target")
+    # plt.xticks(ind + width * 1.5, list(range(1, maps + 1)))
+    # plt.legend(loc="best")
+    # plt.savefig("graphs/3.png")
+    # plt.close(figure)
+    # writeToFile(3, dataFile, rules, testMeans, testVariances, testActions)
 
-    """
-    Part 2-2
-    """
-    rules = [rule3MAMTWithoutClue, rule3MAMTWithClue,
-             improvedMAMTWithoutClue, improvedMAMTWithClue]
-    testSearches, testMovements, testActions, testMeans, testVariances = testRules(
-        rules, dim, maps, iterationsPerMap)
-    figure = plt.figure(figsize=((10., 6.)))
-    plt.bar(
-        ind, testSearches[rule3MAMTWithoutClue.__name__], width, label="Rule 3 Searches (No Clue)", bottom=testMovements[rule3MAMTWithoutClue.__name__], color="red")
-    plt.bar(
-        ind, testMovements[rule3MAMTWithoutClue.__name__], width, label="Rule 3 Movements (No Clue)", color="darkred")
-    plt.bar(ind + width,
-            testSearches[rule3MAMTWithClue.__name__], width, label="Rule 3 Searches (w/ Clue)", bottom=testMovements[rule3MAMTWithClue.__name__], color="gold")
-    plt.bar(ind + width,
-            testMovements[rule3MAMTWithClue.__name__], width, label="Rule 3 Movements (w/ Clue)", color="goldenrod")
-    plt.bar(
-        ind + width * 2, testSearches[improvedMAMTWithoutClue.__name__], width, label="Improved Agent Searches (No Clue)", bottom=testMovements[improvedMAMTWithoutClue.__name__], color="lightgreen")
-    plt.bar(
-        ind + width * 2, testMovements[improvedMAMTWithoutClue.__name__], width, label="Improved Agent Movements (No Clue)", color="green")
-    plt.bar(ind + width * 3,
-            testSearches[improvedMAMTWithClue.__name__], width, label="Improved Agent Searches (w/ Clue)", bottom=testMovements[improvedMAMTWithClue.__name__], color="blue")
-    plt.bar(ind + width * 3,
-            testMovements[improvedMAMTWithClue.__name__], width, label="Improved Agent Movements (w/ Clue)", color="darkblue")
-    plt.ylabel("Actions")
-    plt.xlabel("Map")
-    plt.title("Moving Agent, Moving Target")
-    plt.xticks(ind + width * 1.5, list(range(1, maps + 1)))
-    plt.legend(loc="best")
-    plt.savefig("graphs/4.png")
-    plt.close(figure)
-    writeToFile(4, dataFile, rules, testMeans, testVariances, testActions)
+    # """
+    # Part 2-2
+    # """
+    # rules = [rule3MAMTWithoutClue, rule3MAMTWithClue,
+    #          improvedMAMTWithoutClue, improvedMAMTWithClue]
+    # testSearches, testMovements, testActions, testMeans, testVariances = testRules(
+    #     rules, dim, maps, iterationsPerMap)
+    # figure = plt.figure(figsize=((10., 6.)))
+    # plt.bar(
+    #     ind, testSearches[rule3MAMTWithoutClue.__name__], width, label="Rule 3 Searches (No Clue)", bottom=testMovements[rule3MAMTWithoutClue.__name__], color="red")
+    # plt.bar(
+    #     ind, testMovements[rule3MAMTWithoutClue.__name__], width, label="Rule 3 Movements (No Clue)", color="darkred")
+    # plt.bar(ind + width,
+    #         testSearches[rule3MAMTWithClue.__name__], width, label="Rule 3 Searches (w/ Clue)", bottom=testMovements[rule3MAMTWithClue.__name__], color="gold")
+    # plt.bar(ind + width,
+    #         testMovements[rule3MAMTWithClue.__name__], width, label="Rule 3 Movements (w/ Clue)", color="goldenrod")
+    # plt.bar(
+    #     ind + width * 2, testSearches[improvedMAMTWithoutClue.__name__], width, label="Improved Agent Searches (No Clue)", bottom=testMovements[improvedMAMTWithoutClue.__name__], color="lightgreen")
+    # plt.bar(
+    #     ind + width * 2, testMovements[improvedMAMTWithoutClue.__name__], width, label="Improved Agent Movements (No Clue)", color="green")
+    # plt.bar(ind + width * 3,
+    #         testSearches[improvedMAMTWithClue.__name__], width, label="Improved Agent Searches (w/ Clue)", bottom=testMovements[improvedMAMTWithClue.__name__], color="blue")
+    # plt.bar(ind + width * 3,
+    #         testMovements[improvedMAMTWithClue.__name__], width, label="Improved Agent Movements (w/ Clue)", color="darkblue")
+    # plt.ylabel("Actions")
+    # plt.xlabel("Map")
+    # plt.title("Moving Agent, Moving Target")
+    # plt.xticks(ind + width * 1.5, list(range(1, maps + 1)))
+    # plt.legend(loc="best")
+    # plt.savefig("graphs/4.png")
+    # plt.close(figure)
+    # writeToFile(4, dataFile, rules, testMeans, testVariances, testActions)
 
-    """
-    Part Extra
-    """
-    rules = [rule3MAMTWithClue, rule3MAMTExtra,
-             improvedMAMTWithClue, improvedMAMTExtra]
-    testSearches, testMovements, testActions, testMeans, testVariances = testRules(
-        rules, dim, maps, iterationsPerMap)
-    figure = plt.figure(figsize=((10., 6.)))
-    plt.bar(
-        ind, testSearches[rule3MAMTWithClue.__name__], width, label="Rule 3 Searches (w/ Clue)", bottom=testMovements[rule3MAMTWithClue.__name__], color="red")
-    plt.bar(
-        ind, testMovements[rule3MAMTWithClue.__name__], width, label="Rule 3 Movements (w/ Clue)", color="darkred")
-    plt.bar(ind + width,
-            testSearches[rule3MAMTExtra.__name__], width, label="Rule 3 Searches (Extra)", bottom=testMovements[rule3MAMTExtra.__name__], color="gold")
-    plt.bar(ind + width,
-            testMovements[rule3MAMTExtra.__name__], width, label="Rule 3 Movements (Extra)", color="goldenrod")
-    plt.bar(
-        ind + width * 2, testSearches[improvedMAMTWithClue.__name__], width, label="Improved Agent Searches (w/ Clue)", bottom=testMovements[improvedMAMTWithClue.__name__], color="lightgreen")
-    plt.bar(
-        ind + width * 2, testMovements[improvedMAMTWithClue.__name__], width, label="Improved Agent Movements (w/ Clue)", color="green")
-    plt.bar(ind + width * 3,
-            testSearches[improvedMAMTExtra.__name__], width, label="Improved Agent Searches (Extra)", bottom=testMovements[improvedMAMTExtra.__name__], color="blue")
-    plt.bar(ind + width * 3,
-            testMovements[improvedMAMTExtra.__name__], width, label="Improved Agent Movements (Extra)", color="darkblue")
-    plt.ylabel("Actions")
-    plt.xlabel("Map")
-    plt.title("Moving Agent, Moving Target (Extra)")
-    plt.xticks(ind + width * 1.5, list(range(1, maps + 1)))
-    plt.legend(loc="best")
-    plt.savefig("graphs/5.png")
-    plt.close(figure)
-    writeToFile(5, dataFile, rules, testMeans, testVariances, testActions)
+    # """
+    # Part Extra
+    # """
+    # rules = [rule3MAMTWithClue, rule3MAMTExtra,
+    #          improvedMAMTWithClue, improvedMAMTExtra]
+    # testSearches, testMovements, testActions, testMeans, testVariances = testRules(
+    #     rules, dim, maps, iterationsPerMap)
+    # figure = plt.figure(figsize=((10., 6.)))
+    # plt.bar(
+    #     ind, testSearches[rule3MAMTWithClue.__name__], width, label="Rule 3 Searches (w/ Clue)", bottom=testMovements[rule3MAMTWithClue.__name__], color="red")
+    # plt.bar(
+    #     ind, testMovements[rule3MAMTWithClue.__name__], width, label="Rule 3 Movements (w/ Clue)", color="darkred")
+    # plt.bar(ind + width,
+    #         testSearches[rule3MAMTExtra.__name__], width, label="Rule 3 Searches (Extra)", bottom=testMovements[rule3MAMTExtra.__name__], color="gold")
+    # plt.bar(ind + width,
+    #         testMovements[rule3MAMTExtra.__name__], width, label="Rule 3 Movements (Extra)", color="goldenrod")
+    # plt.bar(
+    #     ind + width * 2, testSearches[improvedMAMTWithClue.__name__], width, label="Improved Agent Searches (w/ Clue)", bottom=testMovements[improvedMAMTWithClue.__name__], color="lightgreen")
+    # plt.bar(
+    #     ind + width * 2, testMovements[improvedMAMTWithClue.__name__], width, label="Improved Agent Movements (w/ Clue)", color="green")
+    # plt.bar(ind + width * 3,
+    #         testSearches[improvedMAMTExtra.__name__], width, label="Improved Agent Searches (Extra)", bottom=testMovements[improvedMAMTExtra.__name__], color="blue")
+    # plt.bar(ind + width * 3,
+    #         testMovements[improvedMAMTExtra.__name__], width, label="Improved Agent Movements (Extra)", color="darkblue")
+    # plt.ylabel("Actions")
+    # plt.xlabel("Map")
+    # plt.title("Moving Agent, Moving Target (Extra)")
+    # plt.xticks(ind + width * 1.5, list(range(1, maps + 1)))
+    # plt.legend(loc="best")
+    # plt.savefig("graphs/5.png")
+    # plt.close(figure)
+    # writeToFile(5, dataFile, rules, testMeans, testVariances, testActions)
 
     dataFile.write("\n\n")
     dataFile.close()

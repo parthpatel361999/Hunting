@@ -29,6 +29,7 @@ def rule2SAMTWithClue(agent, target):
         #print('Target Position: ', target.position)
 
         if searchResult == False:
+            target.move()
             withinFive = targetInRange(agent, target, prevr, prevc)
             #print('target in range? ', withinFive)
             scale = 1 - agent.map[r][c].probability + \
@@ -56,7 +57,7 @@ def rule2SAMTWithClue(agent, target):
                 minScore, r, c = maxInRange(agent, prevr, prevc)
             else:
                 minScore, r, c = maxOutRange(agent, prevr, prevc)
-            target.move()
+
     return agent.numMoves
 
 
@@ -80,7 +81,7 @@ def rule2SAMTWithoutClue(agent, target):
         #print('Target Position: ', target.position)
 
         if searchResult == False:
-            #print('target in range? ', withinFive)
+            target.move()
             scale = 1 - agent.map[r][c].probability + \
                 agent.map[r][c].probability * \
                 agent.map[r][c].falseNegativeProbability
@@ -107,7 +108,6 @@ def rule2SAMTWithoutClue(agent, target):
                     j = j + 1
                 i = i + 1
 
-            target.move()
     return agent.numMoves
 # total = 0
 # numTrials = 10

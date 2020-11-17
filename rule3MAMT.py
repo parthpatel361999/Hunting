@@ -29,6 +29,7 @@ def rule3MAMTWithClue(agent, target):
         #print('Target Position: ', target.position)
 
         if searchResult == False:
+            target.move()
             withinFive = targetInRange(agent, target, prevr, prevc)
             #print('target in range? ', withinFive)
             scale = 1 - agent.map[r][c].probability + \
@@ -58,7 +59,7 @@ def rule3MAMTWithClue(agent, target):
             else:
                 minScore, r, c = minOutRange(agent, prevr, prevc)
             numActions((prevr, prevc), (r, c), agent)
-            target.move()
+
     return agent.numMoves
 
 
@@ -80,6 +81,7 @@ def rule3MAMTWithoutClue(agent, target):
         prevc = c
         searchResult = agent.searchCell(r, c, target)
         if searchResult == False:
+            target.move()
             scale = 1 - agent.map[r][c].probability + \
                 agent.map[r][c].probability * \
                 agent.map[r][c].falseNegativeProbability
@@ -103,7 +105,6 @@ def rule3MAMTWithoutClue(agent, target):
                     j = j + 1
                 i = i + 1
             numActions((prevr, prevc), (r, c), agent)
-            target.move()
 
     return agent.numMoves
 

@@ -55,6 +55,7 @@ def improvedMAMTWithClue(agent, target, thresh=0.2):
         searchResult = agent.searchCell(r, c, target)  # search cell
         withinFive = targetInRange(agent, target, r, c)  # check if within 5
         if searchResult == False:  # if not found
+            target.move()
             r, c = ba3(agent, r, c)  # normalize board
             if not withinFive:  # if outside
                 # find best score in cells outside
@@ -69,7 +70,6 @@ def improvedMAMTWithClue(agent, target, thresh=0.2):
 
             if(r == -1 and c == -1):
                 break
-            target.move()
 
     return agent.numMoves
 
@@ -91,11 +91,11 @@ def improvedMAMTWithoutClue(agent, target, thresh=0.2):
         prevc = c
         searchResult = agent.searchCell(r, c, target)
         if searchResult == False:
+            target.move()
             r, c = ba3(agent, r, c)
             r, c = improvementMAST(agent, target, r, c, prevr, prevc, thresh)
             if(r == -1 and c == -1):
                 break
-            target.move()
 
     return agent.numMoves
 

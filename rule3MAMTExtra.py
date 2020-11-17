@@ -30,6 +30,8 @@ def rule3MAMTExtra(agent, target):
         #print('Target Position: ', target.position)
 
         if searchResult == False:
+            target.move(theWay(r, c, findNeighbors(
+                target.position[0], target.position[1], agent.dim)))
             withinFive = targetInRange(agent, target, prevr, prevc)
             #print('target in range? ', withinFive)
             scale = 1 - agent.map[r][c].probability + \
@@ -59,8 +61,7 @@ def rule3MAMTExtra(agent, target):
             else:
                 minScore, r, c = minOutRange(agent, prevr, prevc)
             numActions((prevr, prevc), (r, c), agent)
-            target.move(theWay(r, c, findNeighbors(
-                target.position[0], target.position[1], agent.dim)))  # pain
+            # pain
     return agent.numMoves
 
 

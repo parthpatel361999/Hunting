@@ -5,7 +5,9 @@ import numpy as np
 from common import Agent, Target, manhattanDistance, numActions
 
 '''
-    to be compared to rule 2, so used the rule two probability updates
+    This is Basic Agent 3 for the moving target. It is the same as Basic Agent 3 for the stationary target, with the additional information
+    of whether the target is within a Manhattan distance of 5 of the agent. We limit our search to only those cells on the board 
+    that are within a distance of 5 or out of 5, depending on the clue. 
 '''
 
 
@@ -53,10 +55,10 @@ def rule3MAMTWithClue(agent, target):
                         agent.map[i][j].probability * (1 - agent.map[i][j].falseNegativeProbability))
                     j = j + 1
                 i = i + 1
-
+            # if the target is within five, find the minimum cell oout of those within five 
             if withinFive:
                 minScore, r, c = minInRange(agent, prevr, prevc)
-            else:
+            else: # if the target is not within five, find the minimum cell out of those that are not within five
                 minScore, r, c = minOutRange(agent, prevr, prevc)
             numActions((prevr, prevc), (r, c), agent)
 

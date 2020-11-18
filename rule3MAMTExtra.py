@@ -6,7 +6,8 @@ from common import (Agent, Target, findNeighbors, manhattanDistance,
                     numActions, theWay)
 
 '''
-    to be compared to rule 2, so used the rule two probability updates
+    This is Basic Agent 3 for the extra part that we completed, where the target moves directly away from the agent. 
+    Everything about this agent remains the same as the Basic Agent for the first moving target. 
 '''
 
 

@@ -1,11 +1,20 @@
 import random as rnd
-
 from common import Agent, Target, numActions
 
+'''
+Run Jumping Basic Agent 2 on a Stationary Target
+1. Determine the cell with the highest probability of finding the target.
+2. Search this cell.
+3. Update the belief state and score of the searched cell.
+4. Update the belief state and score of the remaining cells using the scaling factor.
+5. Repeat at step 1 if the target was not found. 
+'''
 
 def rule2SAST(agent, target):
     highest = 0
     r = c = 0
+
+    # Set the initial scores
     for row in agent.map:
         for cell in row:
             cell.score = cell.probability * (1 - cell.falseNegativeProbability)
@@ -19,9 +28,13 @@ def rule2SAST(agent, target):
         prevc = c
         searchResult = agent.searchCell(r, c, target)
         if searchResult == False:
+
+            # Calculate the scaling factor
             scale = 1 - agent.map[r][c].probability + \
                 agent.map[r][c].probability * \
                 agent.map[r][c].falseNegativeProbability
+
+            # Update the belief state of the searched cell
             agent.map[r][c].probability = agent.map[r][c].probability * \
                 agent.map[r][c].falseNegativeProbability
             i = 0
@@ -31,49 +44,17 @@ def rule2SAST(agent, target):
                     if i == prevr and j == prevc:
                         j += 1
                         continue
+
+                    # Update the belief state and scaling factor of all cells
                     agent.map[i][j].probability = agent.map[i][j].probability / scale
                     agent.map[i][j].score = agent.map[i][j].probability * \
                         (1 - agent.map[i][j].falseNegativeProbability)
+
+                    # Keep track of the highest scored cell for the next search
                     if agent.map[i][j].score > maxP:
                         maxP = agent.map[i][j].score
                         r = i
                         c = j
                     j += 1
                 i += 1
-            #numActions((prevr, prevc), (r,c), agent)
-        # print("probs:")
-        # displayProbabilities(agent)
-        # print("scores:")
-        # displayScores(agent)
-        # input()
-        # print()
     return agent.numMoves
-
-
-# def displayScores(agent):
-#     for r in agent.map:
-#         for cell in r:
-#             print("{:.5f}".format(cell.score), end='  ')
-#         print()
-
-
-# def displayProbabilities(agent):
-#     for r in agent.map:
-#         for cell in r:
-#             print("{:.5f}".format(cell.probability), end='  ')
-#         print()
-
-
-# total = 0
-# numTrials = 1
-# dim = 50
-# for i in range(numTrials):
-#     agent = Agent(dim)
-#     target = Target(dim)
-#     # for r in agent.map:
-#     #     for cell in r:
-#     #         print(cell.falseNegativeProbability, end='  ')
-#     #     print()
-#     # print(target.position)
-#     total += rule2SAST(agent, target)
-# print("Average Moves Taken: " + str(float(total / numTrials)))

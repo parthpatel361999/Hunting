@@ -1,13 +1,16 @@
 import random as rnd
-
 import numpy as np
-
 from common import Agent, Target, maxInRange, maxOutRange, targetInRange
 
 '''
-    to be compared to rule 1, so used the rule one probability updates
+Run Jumping Basic Agent 1 on a Moving Target with Proximity Clue
+1. Move the target to a new location.
+2. Determine the cell with the highest probability of containing the target with the clue.
+3. Create the scale factor based on the probability of the searched cell.
+4. Update the probability of the searched cell using the scaling factor.
+5. Update the probability of the remaining cells using the scaling factor.
+6. Repeat at step 1 if the target was not found. 
 '''
-
 
 def rule1SAMTWithClue(agent, target):
     highest = 0
@@ -18,16 +21,17 @@ def rule1SAMTWithClue(agent, target):
         prevr = r
         prevc = c
         searchResult = agent.searchCell(r, c, target)
-        #print('searched cell: ', (prevr,prevc))
-        #print('Target Position: ', target.position)
 
         if searchResult == False:
             target.move()
             withinFive = targetInRange(agent, target, prevr, prevc)
-            #print('target in range? ', withinFive)
+
+            # Calculate the scaling factor
             scale = 1 - agent.map[r][c].probability + \
                 agent.map[r][c].probability * \
                 agent.map[r][c].falseNegativeProbability
+
+            # Update the probability of the searched cell
             agent.map[r][c].probability = agent.map[r][c].falseNegativeProbability * \
                 agent.map[r][c].probability
             agent.map[r][c].score = agent.map[r][c].probability
@@ -38,11 +42,14 @@ def rule1SAMTWithClue(agent, target):
                     if prevr == i and prevc == j:
                         j += 1
                         continue
+
+                    # Update the probability of the remaining cells
                     agent.map[i][j].probability = agent.map[i][j].probability / scale
                     agent.map[i][j].score = agent.map[i][j].probability
                     j = j + 1
                 i = i + 1
-
+            
+            # Find the best cell to search next
             if withinFive:
                 minScore, r, c = maxInRange(agent, prevr, prevc)
             else:
@@ -50,32 +57,35 @@ def rule1SAMTWithClue(agent, target):
 
     return agent.numMoves
 
+'''
+Run Jumping Basic Agent 1 on a Moving Target without Proximity Clue
+1. Move the target to a new location.
+2. Determine the cell with the highest probability of containing the target.
+3. Create the scale factor based on the probability of the searched cell.
+4. Update the probability of the searched cell using the scaling factor.
+5. Update the probability of the remaining cells using the scaling factor.
+6. Repeat at step 1 if the target was not found. 
+'''
 
 def rule1SAMTWithoutClue(agent, target):
     highest = 0
     r = c = 0
-
-    # for row in agent.map:
-    #     for cell in row:
-    #         cell.score = cell.probability * (1 - cell.falseNegativeProbability)
-    #         if cell.score > highest:
-    #             highest = cell.score
-    #             r, c = cell.row, cell.col
 
     while agent.hasFoundTarget == False:
         maxBelief = 0
         prevr = r
         prevc = c
         searchResult = agent.searchCell(r, c, target)
-        #print('searched cell: ', (prevr,prevc))
-        #print('Target Position: ', target.position)
 
         if searchResult == False:
             target.move()
-            #print('target in range? ', withinFive)
+
+            # Calculate the scaling factor
             scale = 1 - agent.map[r][c].probability + \
                 agent.map[r][c].probability * \
                 agent.map[r][c].falseNegativeProbability
+            
+            # Update the probability of the searched cell
             agent.map[r][c].probability = agent.map[r][c].falseNegativeProbability * \
                 agent.map[r][c].probability
             agent.map[r][c].score = agent.map[r][c].probability
@@ -86,7 +96,10 @@ def rule1SAMTWithoutClue(agent, target):
                     if prevr == i and prevc == j:
                         j += 1
                         continue
+                    # Update the probability of the remaining cells 
                     agent.map[i][j].probability = agent.map[i][j].probability / scale
+
+                    # Keep track of the highest probability cell
                     if agent.map[i][j].probability > maxBelief:
                         maxBelief = agent.map[i][j].probability
                         r = i
@@ -95,24 +108,3 @@ def rule1SAMTWithoutClue(agent, target):
                 i = i + 1
 
     return agent.numMoves
-
-
-# agent = Agent(12)
-# y = withinRange5(agent,5,5)
-# print(len(y))
-
-# total = 0
-# numTrials = 10
-# dim = 10
-# for i in range(numTrials):
-#     agent = Agent(dim)
-#     target = Target(dim)
-#     while agent.map[target.position[0]][target.position[1]].falseNegativeProbability == 0.9:
-#         target = Target(dim)
-#     # for r in agent.map:
-#     #     for cell in r:
-#     #         print(cell.falseNegativeProbability, end='  ')
-#     #     print()
-#     # print(target.position)
-#     total += movingTarget1(agent, target)
-# print("Average Moves Taken: " + str(float(total / numTrials)))

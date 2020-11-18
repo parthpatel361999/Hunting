@@ -1,4 +1,5 @@
 import random as rnd
+import time
 
 from common import Agent, Target, manhattanDistance, numActions
 
@@ -63,17 +64,12 @@ def rule3MAST(agent, target):
 
 
 # total = 0
-# numTrials = 10
-# dim = 10
+# numTrials = 20
+# dim = 30
 # for i in range(numTrials):
+#     startTime = time.time()
 #     agent = Agent(dim)
 #     target = Target(dim)
-#     while agent.map[target.position[0]][target.position[1]].falseNegativeProbability == 0.9:
-#         target = Target(dim)
-#     # for r in agent.map:
-#     #     for cell in r:
-#     #         print(cell.falseNegativeProbability, end='  ')
-#     #     print()
-#     # print(target.position)
-#     total += basicAgent3(agent, target)
+#     total += rule3MAST(agent, target)
+#     print("iteration", str(i) + ":", time.time() - startTime)
 # print("Average Moves Taken: " + str(float(total / numTrials)))

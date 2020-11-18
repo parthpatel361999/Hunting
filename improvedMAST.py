@@ -203,13 +203,13 @@ def improvedMAST(agent, target):
 # #         print()
 
 
-total = 0
-numTrials = 20
-dim = 30
-for i in range(numTrials):
-    startTime = time.time()
-    agent = Agent(dim)
-    target = Target(dim)
-    total += improvedMAST(agent, target)
-    print("iteration", str(i) + ":", time.time() - startTime)
-print("Average Moves Taken: " + str(float(total / numTrials)))
+# total = 0
+# numTrials = 20
+# dim = 30
+# for i in range(numTrials):
+#     startTime = time.time()
+#     agent = Agent(dim)
+#     target = Target(dim)
+#     total += improvedMAST(agent, target)
+#     print("iteration", str(i) + ":", time.time() - startTime)
+# print("Average Moves Taken: " + str(float(total / numTrials)))

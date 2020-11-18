@@ -6,7 +6,8 @@ import numpy as np
 
 from common import (Agent, Target, at6, manhattanDistance, minInRange,
                     minOutRange, numActions, targetInRange, withinRange5)
-from improvedMAST import improvementMAST
+
+# from improvedMAST import improvementMAST
 
 
 def improvedMAMTWithClue(agent, target):
